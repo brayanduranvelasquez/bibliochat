@@ -22,6 +22,7 @@ import {
   Sparkles,
   ArrowUp,
   FileText,
+  FileSearch,
   Library,
   Zap,
   Plus,
@@ -44,6 +45,7 @@ export function App() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const prevUserRef = useRef(user)
   const hasSentPendingRef = useRef(false)
+  const toolMessagesRef = useRef<any[]>([])
 
   // Fetch recent conversations for landing
   const { data: recentConversations } = useQuery({
@@ -88,16 +90,39 @@ export function App() {
   // Load history into useChat messages
   useEffect(() => {
     if (historyData?.messages) {
-      const formattedMessages: UIMessage[] = historyData.messages.map(
-        (m: any) => ({
+      const userAndAssistantMessages = historyData.messages
+        .filter((m: any) => m.type !== "tool")
+        .map((m: any) => ({
           id: m.id.toString(),
           role: m.type === "user" ? "user" : "assistant",
           content: m.content,
-          parts: [{ type: "text", text: m.content }],
+          parts: [{ type: "text" as const, text: m.content }],
           createdAt: new Date(m.createdAt),
+        }))
+      
+      setMessages(userAndAssistantMessages)
+      
+      // Also store tool messages in a separate ref for rendering
+      toolMessagesRef.current = historyData.messages
+        .filter((m: any) => m.type === "tool")
+        .map((m: any) => {
+          try {
+            const toolData = JSON.parse(m.content)
+            return {
+              id: m.id.toString(),
+              toolName: toolData.tool || "unknown",
+              result: toolData.result,
+              createdAt: new Date(m.createdAt),
+            }
+          } catch {
+            return {
+              id: m.id.toString(),
+              toolName: "unknown",
+              result: m.content,
+              createdAt: new Date(m.createdAt),
+            }
+          }
         })
-      )
-      setMessages(formattedMessages)
 
       // If this was just initialized, trigger the AI response
       if (isFreshChatRef.current) {
@@ -581,6 +606,57 @@ export function App() {
                 </div>
               </div>
             ))}
+
+            {/* Render tool messages from database */}
+            {toolMessagesRef.current.map((toolMsg) => {
+              const toolInfo = toolMsg.result
+              const isBooksArray = Array.isArray(toolInfo)
+              return (
+                <div
+                  key={toolMsg.id}
+                  className="flex animate-in gap-4 duration-300 slide-in-from-bottom-2"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-500/20">
+                    <FileSearch className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div className="max-w-[80%] rounded-2xl bg-blue-500/10 px-4 py-3">
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-2">
+                      🔧 Resultado de {toolMsg.toolName}
+                    </div>
+                    <div className="text-sm leading-relaxed text-muted-foreground">
+                      {isBooksArray ? (
+                        <div className="space-y-1">
+                          <div className="font-medium">
+                            📚 {toolInfo.length} libro{toolInfo.length !== 1 ? "s" : ""} encontrado{toolInfo.length !== 1 ? "s" : ""}
+                          </div>
+                          {toolInfo.slice(0, 5).map((book: any, idx: number) => (
+                            <div key={idx} className="text-xs">
+                              • {book.title} - {book.author?.firstName} {book.author?.lastName}
+                            </div>
+                          ))}
+                          {toolInfo.length > 5 && (
+                            <div className="text-xs text-muted-foreground">
+                              ...y {toolInfo.length - 5} más
+                            </div>
+                          )}
+                        </div>
+                      ) : toolInfo?.title ? (
+                        <div>
+                          <div className="font-medium">{toolInfo.title}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {toolInfo.author?.firstName} {toolInfo.author?.lastName}
+                          </div>
+                        </div>
+                      ) : (
+                        <pre className="text-xs overflow-auto max-h-32">
+                          {JSON.stringify(toolInfo, null, 2)}
+                        </pre>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
 
             {(status === "submitted" ||
               (status === "streaming" &&

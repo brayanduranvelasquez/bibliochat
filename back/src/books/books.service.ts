@@ -13,7 +13,9 @@ export class BooksService {
     });
 
     if (!profile) {
-      throw new NotFoundException('User profile not found. Cannot create book. Please update your profile first.');
+      throw new NotFoundException(
+        'User profile not found. Cannot create book. Please update your profile first.',
+      );
     }
 
     return this.prisma.book.create({
@@ -66,7 +68,9 @@ export class BooksService {
         data: updateBookDto,
       });
     } catch (error) {
-      throw new NotFoundException(`Book with ID ${id} not found or update failed`);
+      throw new NotFoundException(
+        `Book with ID ${id} not found or update failed`,
+      );
     }
   }
 
@@ -76,7 +80,9 @@ export class BooksService {
         where: { id },
       });
     } catch (error) {
-      throw new NotFoundException(`Book with ID ${id} not found or remove failed`);
+      throw new NotFoundException(
+        `Book with ID ${id} not found or remove failed`,
+      );
     }
   }
 }

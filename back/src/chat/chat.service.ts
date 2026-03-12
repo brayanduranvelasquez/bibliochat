@@ -61,9 +61,12 @@ export class ChatService {
       console.log('Nueva conversación creada:', conversation.slug);
     }
 
-    const userMessage = messages[messages.length - 1];
+    // Solo guardamos el último USUARIO real (no pasos intermedios del modelo)
+    const lastUserMessage = [...messages].reverse().find(
+      (m) => m.role === 'user',
+    );
     const userContent =
-      userMessage.parts?.map((p: any) => p.text).join('') || '';
+      lastUserMessage?.parts?.map((p: any) => p.text).join('') || '';
 
     // Evitar duplicados si el mensaje ya es el último en la BD
     const lastDbMessage = await this.prisma.conversationMessage.findFirst({
@@ -156,7 +159,9 @@ export class ChatService {
       headers: {
         'x-chat-slug': conversation.slug,
       },
-      onFinish: async ({ text }) => {
+      onStepFinish: async ({ finishReason, text }) => {
+        // Solo guardamos pasos de texto del asistente (no tool-call steps vacíos)
+        if (finishReason === 'tool-calls' || !text || text.trim() === '') return;
         await this.prisma.conversationMessage.create({
           data: {
             conversationId: conversation.id,
@@ -164,7 +169,6 @@ export class ChatService {
             content: text,
           },
         });
-
         await this.prisma.conversation.update({
           where: { id: conversation.id },
           data: { updatedAt: new Date() },

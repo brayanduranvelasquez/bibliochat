@@ -38,7 +38,6 @@ Crea un archivo `.env` en la carpeta `back/` con los siguientes valores:
 ```env
 DATABASE_URL="postgresql://USUARIO:PASSWORD@localhost:5432/bibliochat?schema=public"
 OPENROUTER_API="tu_api_key_de_openrouter"
-MODEL_NAME="google/learnlm-1.5-pro-experimental:free" # Modelo recomendado
 ```
 
 ### 🎨 Frontend (`/front`)

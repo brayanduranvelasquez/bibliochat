@@ -54,7 +54,7 @@ export class AuthService {
       const { password: _, ...result } = user;
       return result;
     } catch (error) {
-      console.error("REGISTER ERROR:", error);
+      console.error('REGISTER ERROR:', error);
       throw error;
     }
   }
@@ -67,13 +67,13 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Esta cuenta no existe');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciales incorrectas');
     }
 
     const payload = { sub: user.id, email: user.email };

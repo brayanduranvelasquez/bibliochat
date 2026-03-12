@@ -13,6 +13,7 @@ import HistoryPage from "./routes/history/page.tsx"
 import Profile from "./routes/profile/page.tsx"
 import BooksPage from "./routes/books/page.tsx"
 import BookReader from "./routes/books/read.tsx"
+import { Toaster } from "./components/ui/sonner.tsx"
 
 const queryClient = new QueryClient()
 
@@ -50,6 +51,7 @@ createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           <RouterProvider router={router} />
         </AuthProvider>
+        <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ThemeProvider>

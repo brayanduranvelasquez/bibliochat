@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: any }) {
     onSuccess: (data) => {
       localStorage.setItem("token", data.access_token)
       queryClient.invalidateQueries({ queryKey: ["me"] })
-      toast.success("Welcome back!")
+      toast.success("Inicio de sesión exitoso")
     },
     onError: (error: unknown) => {
       const err = error as { response?: { data?: { message?: string } } }
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: any }) {
       return response.data
     },
     onSuccess: () => {
-      toast.success("Account created successfully! Please login.")
+      toast.success("Cuenta creada exitosamente. Por favor inicia sesión.")
     },
     onError: (error: unknown) => {
       const err = error as { response?: { data?: { message?: string } } }
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: any }) {
   const logout = () => {
     localStorage.removeItem("token")
     queryClient.setQueryData(["me"], null)
-    toast.success("Logged out successfully")
+    toast.success("Sesión cerrada exitosamente")
   }
 
   return (
