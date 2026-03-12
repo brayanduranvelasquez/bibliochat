@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Loader2,
   ArrowLeft,
+  Library,
 } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -83,6 +84,17 @@ export default function HistoryPage() {
             </Button>
             <h1 className="text-xl font-bold tracking-tight">Historial de Chats</h1>
           </div>
+          <Button variant="ghost" size="sm" asChild className="hidden gap-2 sm:flex">
+            <Link to="/books">
+              <Library className="h-4 w-4 text-primary" />
+              <span>Biblioteca</span>
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild className="sm:hidden">
+            <Link to="/books">
+              <Library className="h-4 w-4 text-primary" />
+            </Link>
+          </Button>
         </div>
       </header>
 

@@ -30,6 +30,26 @@ export class BooksService {
     });
   }
 
+  findAllPublished() {
+    return this.prisma.book.findMany({
+      where: { published: true },
+      include: { author: true },
+    });
+  }
+
+  async findMyBooks(userId: number) {
+    const profile = await this.prisma.profile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) return [];
+
+    return this.prisma.book.findMany({
+      where: { authorId: profile.id },
+      include: { author: true },
+    });
+  }
+
   async findOne(id: number) {
     const book = await this.prisma.book.findUnique({
       where: { id },

@@ -88,7 +88,7 @@ export class ChatService {
     const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
-      model: openrouter('google/gemini-2.0-flash-001'),
+      model: openrouter('stepfun/step-3.5-flash:free'),
       system: `Eres un asistente experto en la biblioteca de libros llamado BiblioChat. Se amable y servicial y trata de no extenderte mucho. Si el usuario pregunta algo no referente a libros dile que solo respondes sobre libros. 
       IMPORTANTE: Cuando uses una herramienta, DEBES usar la información que esta devuelva. No inventes títulos de libros ni autores. 
       Si la herramienta devuelve una lista de libros, menciona esos títulos y autores exactos.

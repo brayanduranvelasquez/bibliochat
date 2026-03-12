@@ -228,6 +228,17 @@ export function App() {
                     <History className="h-4 w-4 text-primary" />
                   </Link>
                 </Button>
+                <Button variant="ghost" size="sm" asChild className="hidden h-9 gap-2 px-3 sm:flex">
+                  <Link to="/books">
+                    <Library className="h-4 w-4 text-primary" />
+                    <span>Biblioteca</span>
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="icon" asChild className="h-9 w-9 sm:hidden">
+                  <Link to="/books">
+                    <Library className="h-4 w-4 text-primary" />
+                  </Link>
+                </Button>
               </div>
             )}
           </div>

@@ -19,14 +19,21 @@ import { AuthGuard } from '../auth/auth.guard';
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
+  @Get()
+  findAllPublished() {
+    return this.booksService.findAllPublished();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  findMyBooks(@Request() req: any) {
+    return this.booksService.findMyBooks(req.user.sub);
+  }
+
+  @UseGuards(AuthGuard)
   @Post()
   create(@Request() req: any, @Body() createBookDto: CreateBookDto) {
     return this.booksService.create(req.user.sub, createBookDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.booksService.findAll();
   }
 
   @Get(':id')

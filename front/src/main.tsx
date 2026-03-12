@@ -11,6 +11,8 @@ import { RouterProvider } from "react-router"
 import { AuthProvider } from "@/contexts/AuthContext.tsx"
 import HistoryPage from "./routes/history/page.tsx"
 import Profile from "./routes/profile/page.tsx"
+import BooksPage from "./routes/books/page.tsx"
+import BookReader from "./routes/books/read.tsx"
 
 const queryClient = new QueryClient()
 
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/books",
+    element: <BooksPage />,
+  },
+  {
+    path: "/books/:id/read",
+    element: <BookReader />,
   },
 ])
 

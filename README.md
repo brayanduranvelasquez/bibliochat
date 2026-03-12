@@ -25,6 +25,68 @@ Este proyecto utiliza un stack moderno y profesional dividido en microservicios:
 *   **PostgreSQL**: Base de datos relacional para el almacenamiento de libros y usuarios.
 *   **OpenRouter**: Gateway para acceder a los modelos de IA más potentes del mercado.
 
+---
+
+## ⚙️ Configuración del Entorno
+
+Para que el proyecto funcione correctamente, es necesario configurar las variables de entorno en ambos directorios.
+
+### 🔌 Backend (`/back`)
+
+Crea un archivo `.env` en la carpeta `back/` con los siguientes valores:
+
+```env
+DATABASE_URL="postgresql://USUARIO:PASSWORD@localhost:5432/bibliochat?schema=public"
+OPENROUTER_API="tu_api_key_de_openrouter"
+MODEL_NAME="google/learnlm-1.5-pro-experimental:free" # Modelo recomendado
+```
+
+### 🎨 Frontend (`/front`)
+
+Crea un archivo `.env` en la carpeta `front/` con los siguientes valores:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+---
+
+## 🚀 Cómo Levantar el Proyecto
+
+Sigue estos pasos para poner en marcha la aplicación en tu entorno local.
+
+### 1. Configuración de Base de Datos y Backend
+
+Asegúrate de tener un servidor de **PostgreSQL** corriendo. Luego, ejecuta:
+
+```bash
+cd back
+npm install
+
+# Generar el cliente de Prisma y ejecutar migraciones
+npx prisma migrate dev --name init
+
+# (Opcional) Sembrar la base de datos con libros de prueba
+npm run seed
+
+# Iniciar el servidor en modo desarrollo
+npm run start:dev
+```
+
+### 2. Configuración del Frontend
+
+En una nueva terminal, ejecuta:
+
+```bash
+cd front
+npm install
+
+# Iniciar la aplicación de React con Vite
+npm run dev
+```
+
+---
+
 ## 🎓 Propósito Académico
 
 Este repositorio tiene un fin estrictamente **didáctico y no comercial**. Se enfoca en resolver los siguientes desafíos técnicos:
