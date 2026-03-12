@@ -69,7 +69,7 @@ export function App() {
 
   const { messages, sendMessage, status, error, setMessages } = useChat({
     transport: new DefaultChatTransport({
-      api: "http://localhost:3000/chat",
+      api: `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/chat`,
       headers: () => ({
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       }),

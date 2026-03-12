@@ -1,0 +1,4 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "_comment": "Este archivo es solo de referencia. El frontend y el backend se despliegan por separado en Vercel. Ver /front/vercel.json y /back/vercel.json"
+}
