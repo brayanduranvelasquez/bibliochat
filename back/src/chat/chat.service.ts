@@ -91,7 +91,7 @@ export class ChatService {
     const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
-      model: openrouter('openrouter/free'),
+      model: openrouter(process.env.MODEL_NAME || 'openrouter/free'),
       system: `Eres un asistente experto en la biblioteca de libros llamado BiblioChat. Se amable y servicial y trata de no extenderte mucho. Si el usuario pregunta algo no referente a libros dile que solo respondes sobre libros. 
       IMPORTANTE: Cuando uses una herramienta, DEBES usar la información que esta devuelva. No inventes títulos de libros ni autores. 
       Si la herramienta devuelve una lista de libros, menciona esos títulos y autores exactos.

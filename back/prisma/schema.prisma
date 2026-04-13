@@ -15,12 +15,31 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  profile  Profile?
+  id               Int             @id @default(autoincrement())
+  email            String          @unique
+  password         String
+  isVerified       Boolean         @default(true) // Always verified for demo
+  currentChallenge String? // Store pending WebAuthn challenge
+  profile          Profile?
+  authenticators   Authenticator[]
 
   conversations Conversation[]
+}
+
+model Authenticator {
+  // Use String for credentialID because WebAuthn IDs can be base64url encoded
+  credentialID         String  @id
+  userId               Int
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Store these as Bytes/Buffers for cryptographic verification
+  publicKey            Bytes
+  counter              BigInt
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String? // Comma-separated list
+  name                 String  @default("Dispositivo")
+
+  @@index([userId])
 }
 
 model Profile {
