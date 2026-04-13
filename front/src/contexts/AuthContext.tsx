@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import instanceAxios from "@/interceptors/instanceAxios"
 import { toast } from "sonner"
 import { startRegistration, startAuthentication } from "@simplewebauthn/browser"
